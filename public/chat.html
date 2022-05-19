@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./chat.css">
+    <title>Chat Socket.io</title>
+</head>
+<body>
+    <main>
+        <div id="chat">
+            <ul id="messages">
+                <!-- Javascript takes on here -->
+            </ul>
+            <form id="message-form">
+                <input type="text"  id="message-input" placeholder="enter your message...">
+                <input type="submit" name="send" id="send-btn">
+            </form>
+        </div>
+    </main>
+</body>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    const socket = io('http://localhost:9000');
+
+    socket.on('messageFromServer', (message) => {
+        let myMsg;
+        if (message.id === socket.id) {
+            myMsg = 'my-msg'
+        }
+        document.getElementById('messages').innerHTML += `<li class="${myMsg}"><span class="message-text">${message.text}</span><span class="time">${message.time}</span></li>`
+        
+    })
+
+    socket.on('isTyping', () => {
+        console.log('is typing')
+        const typing = document.createElement('li')
+        typing.id = 'is-typing'
+        typing.textContent = 'somebody is typing...'
+        if (!document.getElementById('is-typing')) {
+            document.getElementById('messages').appendChild(typing);
+        }
+    })
+
+    socket.on('stopedTyping', () => {
+        if (document.getElementById('is-typing')) {
+            document.getElementById('is-typing').remove()
+        }
+    })
+
+    // socket.on('ping', () => {
+    //     console.log('Ping was recieved from the server')
+    // })
+
+    // socket.on('pong', (latency) => {
+    //     console.log(latency)
+    //     console.log('Pong was sent to the server.')
+    // })
+
+    document.getElementById('message-form').addEventListener('submit', (event) => {
+        event.preventDefault();
+        const newMessage = event.target[0].value
+        // Only sends valid string
+        if(newMessage.trim()){
+            socket.emit('messageToServer', {text: newMessage, id: socket.id});
+            // socket.emit('stopedTyping')
+        }
+        event.target[0].value = '';
+    })
+
+    document.getElementById('message-input').addEventListener('keyup', (event) => {
+        console.log('valor inicial',event.target.value)
+        if (event.target.value.trim()) {
+            socket.emit('isTyping');
+        } else {
+            socket.emit('stopedTyping')
+        }
+    })
+
+</script>
+</html>

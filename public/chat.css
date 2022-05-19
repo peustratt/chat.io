@@ -1,0 +1,130 @@
+*,
+::before,
+::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    height: 100%;
+}
+
+body {
+    height: 100%;
+}
+
+main {
+    height: 100%;
+}
+
+#chat {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+#messages {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    margin-top: auto;
+    list-style: none;
+    background: #ece5dd;
+    height: 100%;
+    padding: 0 1.5em;
+    gap: 0.5em;
+    font-family: Consolas, monaco, monospace;
+}
+
+#messages > li {
+    background: #fff;
+    height: 1.5em;
+    width: fit-content;
+    padding: 1em 0.9em;
+    border-radius: 0 8px 8px 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1em;
+    position: relative;
+}
+
+#messages > li::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    transform: translate(-100%);
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0px 12px 12px 0;
+    border-color:  transparent #FFF transparent transparent;
+}
+
+#messages > li.my-msg {
+    background: #dcf8c6;
+    align-self: flex-end;
+    border-radius: 8px 0 8px 8px;
+}
+
+#messages > li.my-msg::after {
+    all: unset;
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 0;
+    transform: translate(100%);
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 12px 12px 0px 0;
+    border-color: #dcf8c6 transparent transparent transparent;
+}
+
+.message-text {
+    padding-right: 2.5em;
+}
+
+#is-typing {
+    order: 20;
+    color: gray;
+}
+
+.time {
+    position: absolute;
+    right: 6px;
+    bottom: 2px;
+    font-size: 12px;
+    color: gray;
+}
+
+#message-form {
+    margin: 0 auto;
+    width: 100%;
+    display: flex;
+    background: #d3d3d3;
+    padding: 1em 1.2em;
+    gap: 0.9em;
+}
+
+#message-input {
+    width: 100%;
+    font-size: 18px;
+    text-indent: 0.8em;
+    border-radius: 5px;
+    padding: 0.6em 0;
+    border: none;
+}
+
+#send-btn {
+    border: 0;
+    background: rgb(27, 87, 255);
+    border-radius: 5px;
+    padding: 0.3em 0.7em;
+    color: white;
+    font-size: 18px;
+}
