@@ -22,7 +22,7 @@
 </body>
 <script src="/socket.io/socket.io.js"></script>
 <script>
-    const socket = io('http://localhost:9000');
+    const socket = io('http://localhost');
 
     socket.on('messageFromServer', (message) => {
         let myMsg;
