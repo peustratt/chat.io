@@ -22,7 +22,7 @@
 </body>
 <script src="/socket.io/socket.io.js"></script>
 <script>
-    const socket = io('http://localhost');
+    const socket = io('http://localhost:8080');
 
     socket.on('messageFromServer', (message) => {
         let myMsg;
@@ -70,10 +70,13 @@
     })
 
     document.getElementById('message-input').addEventListener('keyup', (event) => {
+        const sendBtn = document.getElementById('send-btn')
         console.log('valor inicial',event.target.value)
         if (event.target.value.trim()) {
+            sendBtn.style.background = "rgb(27, 87, 255)"
             socket.emit('isTyping');
         } else {
+            sendBtn.style.background = ""
             socket.emit('stopedTyping')
         }
     })

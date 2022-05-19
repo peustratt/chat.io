@@ -34,7 +34,7 @@ main {
     list-style: none;
     background: #ece5dd;
     height: 100%;
-    padding: 0 1.5em;
+    padding: 1em 1.5em;
     gap: 0.5em;
     font-family: Consolas, monaco, monospace;
 }
@@ -120,9 +120,13 @@ main {
     border: none;
 }
 
+#message-input:focus {
+    outline: none;
+}
+
 #send-btn {
     border: 0;
-    background: rgb(27, 87, 255);
+    background: gray;
     border-radius: 5px;
     padding: 0.3em 0.7em;
     color: white;
