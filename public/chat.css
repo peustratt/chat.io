@@ -34,9 +34,11 @@ main {
     list-style: none;
     background: #ece5dd;
     height: 100%;
+    max-height: fit-content;
     padding: 1em 1.5em;
     gap: 0.5em;
     font-family: Consolas, monaco, monospace;
+    overflow-y: scroll;
 }
 
 #messages > li {
