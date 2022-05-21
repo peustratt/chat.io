@@ -2,10 +2,10 @@
   "name": "chat.io",
   "version": "1.0.0",
   "description": "",
-  "main": "chat.js",
+  "main": "index.js",
   "scripts": {
-    "start": "node chat.js",
-    "dev": "nodemon chat.js"
+    "start": "node index.js",
+    "dev": "nodemon index.js"
   },
   "dependencies": {
     "express": "^4.18.1",
