@@ -16,7 +16,8 @@ const io = socketio(expressServer);
 io.on('connection', (socket) => {
     socket.on('messageToServer', (dataFromClient) => {
         const time = new Date();
-        const newData = {...dataFromClient, time: `${time.getHours()}:${time.getMinutes()}`}
+        const hours = time.getHours() - 3;
+        const newData = {...dataFromClient, time: `${hours < 3 ? hours + 24 : hours}:${time.getMinutes()}`}
         io.emit('messageFromServer', (newData));
     })
 
