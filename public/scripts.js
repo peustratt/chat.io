@@ -1,5 +1,36 @@
 const socket = io('http://localhost:8080');
 
+socket.on('nsList', (nsData) => {
+    const namespacesDiv = document.querySelector('.namespaces');
+    namespacesDiv.innerHTML = '';
+    nsData.forEach(namespace => {
+        namespacesDiv.innerHTML += `<div class="namespace" ns="${namespace.endpoint}"><img src="${namespace.img}"></div>`
+    })
+
+    document.querySelectorAll('.namespace').forEach(element => {
+        element.addEventListener('click', (event) => {
+            const nsEndpoint = element.getAttribute('ns');
+            console.log(nsEndpoint)
+        })
+    })
+    const nsSocket = io('http://localhost:8080/wiki');
+    nsSocket.on('nsRoomLoad', nsRooms => {
+        const roomsList = document.querySelector('.rooms__list');
+        roomsList.innerHTML = ""
+        nsRooms.forEach(room => {
+            roomsList.innerHTML += `<li class="room"><span></span>${room.roomTitle}</li>`
+        })
+
+        const roomLiElements = document.querySelectorAll('.room')
+        roomLiElements.forEach(room => {
+            room.addEventListener('click', (event) => {
+                console.log(`some one clicked on ${event.target.textContent}`)
+            })
+        })
+    })
+})
+
+
 socket.on('messageFromServer', (message) => {
     let myMsg;
     if (message.id === socket.id) {
