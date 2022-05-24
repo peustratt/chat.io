@@ -1,4 +1,4 @@
-const socket = io();
+const socket = io('http://localhost:8080');
 
 socket.on('messageFromServer', (message) => {
     let myMsg;
@@ -6,7 +6,6 @@ socket.on('messageFromServer', (message) => {
         myMsg = 'my-msg'
     }
     document.getElementById('messages').innerHTML += `<li class="${myMsg}"><span class="message-text">${message.text}</span><span class="time">${message.time}</span></li>`
-
 })
 
 socket.on('isTyping', () => {
@@ -24,15 +23,6 @@ socket.on('stopedTyping', () => {
         document.getElementById('is-typing').remove()
     }
 })
-
-// socket.on('ping', () => {
-//     console.log('Ping was recieved from the server')
-// })
-
-// socket.on('pong', (latency) => {
-//     console.log(latency)
-//     console.log('Pong was sent to the server.')
-// })
 
 document.getElementById('message-form').addEventListener('submit', (event) => {
     event.preventDefault();
