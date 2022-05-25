@@ -38,14 +38,14 @@ namespaces.forEach(namespace => {
         // a socket has connected to one of our chat namespaces.
         // send that ns rooms info back
         nsSocket.emit('nsRoomLoad', namespace.rooms);
-        nsSocket.on('joinRoom', async (roomToJoin, numberOfUsersCallback) => {
+        nsSocket.on('joinRoom', async (roomToJoin) => {
             nsSocket.join(roomToJoin);
             console.log(`${nsSocket.id} joined room ${roomToJoin}`)
             const allSockets = await io.of(namespace.endpoint).in(roomToJoin).allSockets();
             const clients = Array.from(allSockets);
-            numberOfUsersCallback(clients.length)
             const nsRoom = namespace.rooms.find(room => room.roomTitle === roomToJoin)
             nsSocket.emit('historyCatchUp', nsRoom.history);
+            io.of(namespace.endpoint).to(roomToJoin).emit('updateMembers', clients.length)
         })
 
         nsSocket.on('messageToServer', (message) => {
