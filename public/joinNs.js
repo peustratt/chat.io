@@ -1,3 +1,16 @@
+function buildHTML(msg) {
+    const msgClass = msg.id === nsSocket.id ? 'my-msg' : ''
+    return `<li class="${msgClass}">
+                    <div class="user-image">
+                        <img src="${msg.avatar}" />
+                    </div>
+                    <div class="user-message ${msgClass}">
+                        <span class="message-text">${msg.text}</span>
+                        <span class="time">${msg.time}</span>
+                    </div>
+                </li>`
+}
+
 function joinNs(endpoint) {    
     nsSocket = io(`http://localhost:8080${endpoint}`);
     nsSocket.on('nsRoomLoad', nsRooms => {
@@ -63,18 +76,4 @@ function joinNs(endpoint) {
             document.getElementById('is-typing').remove()
         }
     })
-
-    function buildHTML(msg) {
-        const msgClass = msg.id === nsSocket.id ? 'my-msg' : ''
-        return `<li class="${msgClass}">
-                    <div class="user-image">
-                        <img src="${msg.avatar}" />
-                    </div>
-                    <div class="user-message ${msgClass}">
-                        <span class="message-text">${msg.text}</span>
-                        <span class="time">${msg.time}</span>
-                    </div>
-                </li>`
-    }
-    
 }
