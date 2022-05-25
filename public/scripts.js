@@ -11,25 +11,11 @@ socket.on('nsList', (nsData) => {
         element.addEventListener('click', (event) => {
             const nsEndpoint = element.getAttribute('ns');
             console.log(nsEndpoint)
+            joinNs(nsEndpoint)
         })
     })
-    const nsSocket = io('http://localhost:8080/wiki');
-    nsSocket.on('nsRoomLoad', nsRooms => {
-        const roomsList = document.querySelector('.rooms__list');
-        roomsList.innerHTML = ""
-        nsRooms.forEach(room => {
-            roomsList.innerHTML += `<li class="room"><span></span>${room.roomTitle}</li>`
-        })
 
-        const roomLiElements = document.querySelectorAll('.room')
-        roomLiElements.forEach(room => {
-            room.addEventListener('click', (event) => {
-                console.log(`some one clicked on ${event.target.textContent}`)
-            })
-        })
-    })
 })
-
 
 socket.on('messageFromServer', (message) => {
     let myMsg;
