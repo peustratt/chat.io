@@ -29,27 +29,49 @@ io.on('connection', (socket) => {
 
 // Chat function
 // io.on('connection', (socket) => {
-//     socket.on('messageToServer', (dataFromClient) => {
-//         const time = new Date();
-//         const hours = time.getHours() - 3;
-//         const newData = {...dataFromClient, time: `${hours < 3 ? hours + 24 : hours}:${time.getMinutes()}`}
-//         io.emit('messageFromServer', (newData));
-//     })
-
-//     socket.on('isTyping', () => {
-//         socket.broadcast.emit('isTyping')
-//     })
-
-//     socket.on('stopedTyping', () => {
-//         socket.broadcast.emit('stopedTyping')
-//     })
+//     
 // })
 
 namespaces.forEach(namespace => {
     io.of(namespace.endpoint).on('connection', (nsSocket) => {
-        console.log(`${nsSocket.id} has join ${namespace.endpoint}`)
+        console.log(`${nsSocket.id} has join namespace ${namespace.endpoint}`)
         // a socket has connected to one of our chat namespaces.
         // send that ns rooms info back
         nsSocket.emit('nsRoomLoad', namespace.rooms);
+
+        nsSocket.on('joinRoom', async (roomToJoin, numberOfUsersCallback) => {
+            nsSocket.join(roomToJoin);
+            console.log(`${nsSocket.id} joined room ${roomToJoin}`)
+            const allSockets = await io.of(namespace.endpoint).in(roomToJoin).allSockets();
+            const clients = Array.from(allSockets);
+            numberOfUsersCallback(clients.length)
+
+            nsSocket.on('messageToServer', (message) => {
+            const time = new Date();
+            const hours = time.getHours() - 3;
+
+            const fullMsg = {
+                text: message.text,
+                time: `${hours < 3 ? hours + 24 : hours}:${time.getMinutes()}`,
+                username: 'Pedro',
+                id: nsSocket.id,
+                avatar: 'https://via.placeholder.com/30'
+            }
+            const roomTitle = Array.from(nsSocket.rooms)[1];
+            io.of(namespace.endpoint).to(roomTitle).emit('messageFromServer', (fullMsg));
+            })
+
+            nsSocket.on('isTyping', () => {
+                const roomTitle = Array.from(nsSocket.rooms)[1];
+                nsSocket.to(roomTitle).emit('isTyping')
+            })
+
+            nsSocket.on('stopedTyping', () => {
+                const roomTitle = Array.from(nsSocket.rooms)[1];
+                nsSocket.to(roomTitle).emit('stopedTyping')
+            })
+
+
+        })
     })
 })

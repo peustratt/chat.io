@@ -104,6 +104,19 @@ main {
 }
 
 #messages > li {
+    display: flex;
+    gap: 1em;
+}
+
+#messages > li.my-msg {
+    align-self: flex-end;
+}
+
+#messages > li.my-msg > .user-image {
+    order: 1;
+}
+
+.user-message {
     background: #fff;
     height: 1.5em;
     width: fit-content;
@@ -114,9 +127,10 @@ main {
     align-items: center;
     gap: 1em;
     position: relative;
+    max-width: 80%;
 }
 
-#messages > li::after {
+.user-message::after {
     content: "";
     position: absolute;
     left: 0;
@@ -129,13 +143,12 @@ main {
     border-color:  transparent #FFF transparent transparent;
 }
 
-#messages > li.my-msg {
+.user-message.my-msg {
     background: #dcf8c6;
-    align-self: flex-end;
     border-radius: 8px 0 8px 8px;
 }
 
-#messages > li.my-msg::after {
+.user-message.my-msg::after {
     all: unset;
     content: "";
     position: absolute;
