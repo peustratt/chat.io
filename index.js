@@ -1,4 +1,5 @@
 const express = require('express');
+const { on } = require('nodemon');
 const app = express();
 const socketio = require('socket.io')
 
@@ -83,11 +84,18 @@ for (let namespace of namespaces) {
             const roomTitle = Array.from(nsSocket.rooms)[1];
             nsSocket.to(roomTitle).emit('stopedTyping')
         })
+
+        nsSocket.on('disconnecting', async () => {
+            const room = Array.from(nsSocket.rooms)[1]
+            const allSockets = await io.of(namespace.endpoint).in(room).allSockets();
+            const clients = Array.from(allSockets);
+            io.of(namespace.endpoint).to(room).emit('updateMembers', clients.length -1);
+        })
     })
 }
 
-async function updateMembers(namespace, room) {
+async function updateMembers(namespace, room, leavingNamespace = false) {
     const allSockets = await io.of(namespace.endpoint).in(room).allSockets();
     const clients = Array.from(allSockets);
-    io.of(namespace.endpoint).to(room).emit('updateMembers', clients.length)
+    io.of(namespace.endpoint).to(room).emit('updateMembers', clients.length);
 }
