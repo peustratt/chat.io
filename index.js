@@ -35,17 +35,25 @@ io.on('connection', (socket) => {
 for (let namespace of namespaces) {
     io.of(namespace.endpoint).on('connection', (nsSocket) => {
         console.log(`${nsSocket.id} has join namespace ${namespace.endpoint}`)
+        console.log(nsSocket.rooms)
         // a socket has connected to one of our chat namespaces.
         // send that ns rooms info back
         nsSocket.emit('nsRoomLoad', namespace.rooms);
-        nsSocket.on('joinRoom', async (roomToJoin) => {
+        nsSocket.on('joinRoom', (roomToJoin) => {
+            // leave previous room
+            const currentRoom = Array.from(nsSocket.rooms)[1]
+            if (currentRoom) {
+                nsSocket.leave(currentRoom)
+                updateMembers(namespace, currentRoom)
+            }
+            // join room
             nsSocket.join(roomToJoin);
             console.log(`${nsSocket.id} joined room ${roomToJoin}`)
-            const allSockets = await io.of(namespace.endpoint).in(roomToJoin).allSockets();
-            const clients = Array.from(allSockets);
+            // load chat history
             const nsRoom = namespace.rooms.find(room => room.roomTitle === roomToJoin)
             nsSocket.emit('historyCatchUp', nsRoom.history);
-            io.of(namespace.endpoint).to(roomToJoin).emit('updateMembers', clients.length)
+            // update number o users for all clients
+            updateMembers(namespace, roomToJoin)
         })
 
         nsSocket.on('messageToServer', (message) => {
@@ -64,8 +72,6 @@ for (let namespace of namespaces) {
             const nsRoom = namespace.rooms.find(room => room.roomTitle === roomTitle);
             nsRoom.addMessage(fullMsg);
             io.of(namespace.endpoint).to(roomTitle).emit('messageFromServer', (fullMsg));
-            console.log('room title', roomTitle)
-            console.log('current room', nsRoom)
         })
 
         nsSocket.on('isTyping', () => {
@@ -78,4 +84,10 @@ for (let namespace of namespaces) {
             nsSocket.to(roomTitle).emit('stopedTyping')
         })
     })
+}
+
+async function updateMembers(namespace, room) {
+    const allSockets = await io.of(namespace.endpoint).in(room).allSockets();
+    const clients = Array.from(allSockets);
+    io.of(namespace.endpoint).to(room).emit('updateMembers', clients.length)
 }

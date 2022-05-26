@@ -37,9 +37,8 @@ function joinNs(endpoint) {
             })
         })
         // add room automatically... first time here
-        const topRoom = document.querySelector('.room');
-        const topRoomName = topRoom.textContent;
-        joinRoom(topRoomName)
+        const topRoom = document.querySelector('.room').textContent;
+        joinRoom(topRoom)
     })
 
     // listen for new messages
