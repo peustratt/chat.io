@@ -19,6 +19,6 @@ function joinRoom(roomName) {
     })
 
     nsSocket.on('updateMembers', (numMembers) => {
-        document.querySelector('.room-header__users').innerHTML = `${numMembers}<span class="glyphicon glyphicon-user"></span>`;
+        document.querySelector('.room-header__users').innerHTML = `Users online: ${numMembers}<span class="glyphicon glyphicon-user"></span>`;
     })
 }

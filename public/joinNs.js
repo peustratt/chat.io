@@ -29,7 +29,7 @@ function joinNs(endpoint) {
         const roomsList = document.querySelector('.rooms__list');
         roomsList.innerHTML = ""
         nsRooms.forEach(room => {
-            roomsList.innerHTML += `<li class="room"><span></span>${room.roomTitle}</li>`
+            roomsList.innerHTML += `<li class="room"><span></span>${room.roomTitle}<span class="room-line"></span></li>`
         })
 
         const roomLiElements = document.querySelectorAll('.room')
