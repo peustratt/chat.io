@@ -32,7 +32,7 @@ io.on('connection', (socket) => {
 //     
 // })
 
-namespaces.forEach(namespace => {
+for (let namespace of namespaces) {
     io.of(namespace.endpoint).on('connection', (nsSocket) => {
         console.log(`${nsSocket.id} has join namespace ${namespace.endpoint}`)
         // a socket has connected to one of our chat namespaces.
@@ -78,4 +78,4 @@ namespaces.forEach(namespace => {
             nsSocket.to(roomTitle).emit('stopedTyping')
         })
     })
-})
+}

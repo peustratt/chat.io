@@ -2,7 +2,7 @@ function joinRoom(roomName) {
     nsSocket.emit('joinRoom', roomName);
 
     nsSocket.on('historyCatchUp', (messages) => {
-        document.querySelector('room-header__title').textContent = roomName;
+        document.querySelector('.room-header__title').textContent = roomName;
         const messagesUl = document.getElementById('messages')
         messagesUl.innerHTML = '';
         messages.forEach(message => {

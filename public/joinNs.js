@@ -12,6 +12,14 @@ function buildHTML(msg) {
 }
 
 function joinNs(endpoint) {    
+    if (nsSocket) {
+        // check to see if nsSocket is alredy connected
+        nsSocket.close();
+        // remove the form eventListener before it's added again
+        document.getElementById('message-form').removeEventListener('submit', formSubmission);
+        document.getElementById('message-input').removeEventListener('keyup', typingEvent)
+    }
+
     nsSocket = io(`http://localhost:8080${endpoint}`);
     nsSocket.on('nsRoomLoad', nsRooms => {
         const roomsList = document.querySelector('.rooms__list');
@@ -39,7 +47,7 @@ function joinNs(endpoint) {
         document.getElementById('messages').innerHTML += buildHTML(message);
     })
 
-    document.getElementById('message-form').addEventListener('submit', (event) => {
+    document.getElementById('message-form').addEventListener('submit', formSubmission = (event) => {
         event.preventDefault();
         const newMessage = event.target[0].value
         // Only sends valid string
@@ -51,7 +59,7 @@ function joinNs(endpoint) {
         event.target[0].value = '';
     })
 
-    document.getElementById('message-input').addEventListener('keyup', (event) => {
+    document.getElementById('message-input').addEventListener('keyup', typingEvent = (event) => {
         const sendBtn = document.getElementById('send-btn')
         if (event.target.value.trim()) {
             sendBtn.style.background = "rgb(27, 87, 255)"
