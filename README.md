@@ -36,7 +36,7 @@ E depois:
 
 ```sh
   # Abra pasta do projeto
-  $ cd tenzies
+  $ cd chat.io
   # Instale as dependencias
   $ yarn ou npm install
   # Rode a aplicação
