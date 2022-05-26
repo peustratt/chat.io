@@ -24,7 +24,7 @@ function joinNs(endpoint) {
         document.getElementById('search-box').value = '';
     }
 
-    nsSocket = io(`https://peus-chat-io.herokuapp.com/${endpoint}`);
+    nsSocket = io(`https://peus-chat-io.herokuapp.com${endpoint}`);
     nsSocket.on('nsRoomLoad', nsRooms => {
         const roomsList = document.querySelector('.rooms__list');
         roomsList.innerHTML = ""
