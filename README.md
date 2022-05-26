@@ -29,7 +29,7 @@
 Em seguida, clone o repositório
 
 ```sh
-  $ git clone https://github.com/peustratt/tenzies.git
+  $ git clone https://github.com/peustratt/chat.io.git
 ```
 
 E depois:
