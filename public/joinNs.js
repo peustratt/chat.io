@@ -58,7 +58,7 @@ function joinNs(endpoint) {
         event.target[0].value = '';
     })
 
-    document.getElementById('message-input').addEventListener('keyup', typingEvent = (event) => {
+    document.getElementById('message-input').addEventListener('input', typingEvent = (event) => {
         const sendBtn = document.getElementById('send-btn')
         if (event.target.value.trim()) {
             sendBtn.style.background = "rgb(27, 87, 255)"
