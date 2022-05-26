@@ -10,9 +10,10 @@ app.get('/', (req, res) => {
     res.sendFile('public/chat.html', { root: __dirname });
 });
 
-const expressServer = app.listen(process.env.PORT || 443, () => {
+const expressServer = app.listen(process.env.PORT || 8080, () => {
     console.log('server listening on port 8080!')
 });
+
 const io = socketio(expressServer);
 
 // io.on = io.of('/').on

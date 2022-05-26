@@ -1,4 +1,4 @@
-const socket = io('https://peus-chat-io.herokuapp.com/');
+const socket = io('http://localhost:8080');
 let nsSocket = ""
 
 socket.on('nsList', (nsData) => {

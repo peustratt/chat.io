@@ -20,7 +20,7 @@ function joinNs(endpoint) {
         document.getElementById('message-input').removeEventListener('keyup', typingEvent)
     }
 
-    nsSocket = io(`https://peus-chat-io.herokuapp.com/${endpoint}`);
+    nsSocket = io(`http://localhost:8080${endpoint}`);
     nsSocket.on('nsRoomLoad', nsRooms => {
         const roomsList = document.querySelector('.rooms__list');
         roomsList.innerHTML = ""
