@@ -1,3 +1,5 @@
+let localMessages = ''
+
 function buildHTML(msg) {
     const msgClass = msg.id === nsSocket.id ? 'my-msg' : ''
     return `<li class="${msgClass}">
@@ -17,7 +19,9 @@ function joinNs(endpoint) {
         nsSocket.close();
         // remove the form eventListener before it's added again
         document.getElementById('message-form').removeEventListener('submit', formSubmission);
-        document.getElementById('message-input').removeEventListener('keyup', typingEvent)
+        document.getElementById('message-input').removeEventListener('input', typingEvent);
+        document.getElementById('search-box').removeEventListener('input', searchEvent);
+        document.getElementById('search-box').value = '';
     }
 
     nsSocket = io(`http://localhost:8080${endpoint}`);
@@ -43,7 +47,22 @@ function joinNs(endpoint) {
 
     // listen for new messages
     nsSocket.on('messageFromServer', (message) => {
-        document.getElementById('messages').innerHTML += buildHTML(message);
+        localMessages.push(message);
+        const messagesUl = document.getElementById('messages');
+        const searchFilter = document.getElementById('search-box').value;
+
+        // if there is no filter push the new message directly to HTML
+        if (!searchFilter) {
+            messagesUl.innerHTML += buildHTML(message);
+        // else reload the HTML filtering the messages
+        } else {
+            messagesUl.innerHTML = ''
+            for (let msg of localMessages) {
+                if (msg.text.toLowerCase().indexOf(searchFilter.toLowerCase()) !== -1) {
+                    messagesUl.innerHTML += buildHTML(msg)
+                }
+            }
+        }
     })
 
     document.getElementById('message-form').addEventListener('submit', formSubmission = (event) => {
@@ -52,9 +71,7 @@ function joinNs(endpoint) {
         // Only sends valid string
         if (newMessage.trim()) {
             nsSocket.emit('messageToServer', { text: newMessage });
-            // socket.emit('stopedTyping')
         }
-        console.log(newMessage, nsSocket.id)
         event.target[0].value = '';
     })
 
@@ -81,6 +98,26 @@ function joinNs(endpoint) {
     nsSocket.on('stopedTyping', () => {
         if (document.getElementById('is-typing')) {
             document.getElementById('is-typing').remove()
+        }
+    })
+
+    document.getElementById('search-box').addEventListener('input', searchEvent = ({ target }) => {
+        const searchFilter = target.value;
+        const messagesUl = document.getElementById('messages')
+        messagesUl.innerHTML = ""
+
+        if (!searchFilter) {
+            for (let message of localMessages) {
+                messagesUl.innerHTML += buildHTML(message);
+            }
+
+        } else {
+            for (let message of localMessages) {
+                if (message.text.toLowerCase().indexOf(searchFilter.toLowerCase()) !== -1) {
+                   messagesUl.innerHTML += buildHTML(message);
+                   console.log('building', message)
+                }
+            }
         }
     })
 }
