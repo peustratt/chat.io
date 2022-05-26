@@ -1,5 +1,4 @@
 const express = require('express');
-const { on } = require('nodemon');
 const app = express();
 const socketio = require('socket.io')
 
